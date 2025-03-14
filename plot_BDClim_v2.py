@@ -10,7 +10,6 @@ import math
 import csv
 from num_jour import num_jour
 from num_jour_between import num_jour_between
-from moyenne import moyenne
 import matplotlib.pyplot as plt
 #from zenith_angle import zenith_angle
 import matplotlib.dates as md
@@ -362,54 +361,7 @@ def plot_DSO(date):
 
 	return time[M:N], data[M:N]
 
-def plot_DSO_moy(date,Z):
-	time = []
-	data = []
-	time_moy = []
-	data_moy = []
-	if date.month>=9 and date.year == 2020:
-		fichier_out = '/cnrm/phynh/data1/magnaldom/BDClim/Donnees_min/rayonnement_20200901_20211231_v2.dat'
-	else :
-		fichier_out = '/cnrm/phynh/data1/magnaldom/BDClim/Donnees_min/rayonnement_20190801_20200901_v2.dat'
-	#Pour convertir du .csv en .dat
-	# fi = open(fichier_out,'w')
-	# M = 0
-	# N = 24*3600
-	# with open(fichier+'.csv', newline='') as csvfile:
-	#	 spamreader = csv.reader(csvfile, delimiter=';', quotechar='\t')
-	#	 for row in spamreader:
-	#		 fi.write(' '.join(row)+'\n')
-	# fi.close()
 
-	data_val_str = np.loadtxt(fichier_out, dtype = 'str', delimiter=' ', usecols=(1), unpack=True)
-	data_date = np.loadtxt(fichier_out, dtype = 'str', delimiter=' ', usecols=(0), unpack=True)
-
-	k = 0
-	M=0
-	for n in range(2,len(data_date)):
-		D = datetime.strptime(data_date[n], '%Y%m%d_%H%M')
-		time.append(D)
-		#print(D)
-		if D==date and k == 0:
-			M = n
-			k = 1
-
-		if float(data_val_str[n])>-10:
-			data.append(float(data_val_str[n]))
-		else :
-			data.append(np.inf)
-
-	N = M + 24*60
-	for i in range(M,N,Z):
-		if i==M:
-			time_moy.append(time[M])
-			data_moy.append(data[M])
-		else :
-			time_moy.append(time[i])
-			data_moy.append(moyenne(data[i-Z:i]))
-
-
-	return time_moy, data_moy
 
 def plot_BDClim_toulouse_inter_date(fichier,date1,date2):
 	time = []
